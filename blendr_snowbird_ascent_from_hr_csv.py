@@ -48,6 +48,11 @@ SENSOR_TO_OBJECT_EULER_DEG = (0.0, 0.0, 0.0)
 # Position reconstruction from acceleration.
 INTEGRATE_POSITION = True
 POSITION_SCALE = 1.0  # Multiply solved position for scene scaling.
+# Remap solved world position components before writing to object location.
+# Source component order: 0=X, 1=Y, 2=Z from the integrator.
+# Default below maps prior +X ascent into +Z in Blender.
+POSITION_AXIS_REMAP = (2, 1, 0)
+POSITION_AXIS_SIGN = (1.0, 1.0, 1.0)
 GRAVITY_M_S2 = 9.80665
 WORLD_GRAVITY_VECTOR = Vector((0.0, 0.0, -GRAVITY_M_S2))
 VELOCITY_DAMPING_PER_S = 0.35  # Helps reduce drift from sensor noise.
@@ -110,6 +115,23 @@ def _clamp_vec_magnitude(vec, max_mag):
     if mag <= max_mag or mag == 0.0:
         return vec
     return vec * (max_mag / mag)
+
+
+def _quat_magnitude(q):
+    mag = getattr(q, "length", None)
+    if mag is not None:
+        return float(mag)
+    mag = getattr(q, "magnitude", None)
+    if mag is not None:
+        return float(mag)
+    return math.sqrt(sum(float(c) * float(c) for c in q))
+
+
+def _remap_position(vec):
+    vals = (float(vec.x), float(vec.y), float(vec.z))
+    i0, i1, i2 = POSITION_AXIS_REMAP
+    s0, s1, s2 = POSITION_AXIS_SIGN
+    return Vector((vals[i0] * s0, vals[i1] * s1, vals[i2] * s2))
 
 
 def _load_rows(csv_path):
@@ -213,6 +235,25 @@ def _set_scene_frame_range(frame_start, frame_end):
     scene.frame_end = int(frame_end)
 
 
+def _clear_existing_motion_keyframes(obj):
+    """Clear previous transform keyframes without assuming Action.fcurves exists."""
+    # Works across Blender versions where Action.fcurves may not be exposed.
+    for data_path in ("location", "rotation_quaternion"):
+        try:
+            obj.keyframe_delete(data_path=data_path)
+        except (TypeError, RuntimeError, AttributeError):
+            pass
+
+    # Best effort cleanup for versions that still expose fcurves.
+    anim = getattr(obj, "animation_data", None)
+    action = getattr(anim, "action", None) if anim else None
+    fcurves = getattr(action, "fcurves", None) if action else None
+    if fcurves is not None:
+        for fc in list(fcurves):
+            if fc.data_path in {"location", "rotation_quaternion"}:
+                fcurves.remove(fc)
+
+
 def main():
     csv_path = Path(CSV_PATH)
     if not csv_path.exists():
@@ -234,18 +275,7 @@ def main():
     rocket = _choose_rocket_object()
     _ensure_animation_data(rocket)
     rocket.rotation_mode = "QUATERNION"
-
-    # Remove previous F-curves on transform channels to avoid layering old motion.
-    if rocket.animation_data and rocket.animation_data.action:
-        action = rocket.animation_data.action
-        keep = []
-        for fc in action.fcurves:
-            if fc.data_path in {"location", "rotation_quaternion"}:
-                continue
-            keep.append(fc)
-        for fc in list(action.fcurves):
-            if fc not in keep:
-                action.fcurves.remove(fc)
+    _clear_existing_motion_keyframes(rocket)
 
     sensor_to_object_q = Euler(
         tuple(math.radians(v) for v in SENSOR_TO_OBJECT_EULER_DEG),
@@ -270,7 +300,7 @@ def main():
         # Blue Raven appears to store quaternion as [w, x, y, z].
         q_wxyz = r["quat"]
         sensor_q = Quaternion((q_wxyz[0], q_wxyz[1], q_wxyz[2], q_wxyz[3]))
-        if sensor_q.length == 0.0:
+        if _quat_magnitude(sensor_q) == 0.0:
             sensor_q = Quaternion((1.0, 0.0, 0.0, 0.0))
         else:
             sensor_q.normalize()
@@ -291,7 +321,7 @@ def main():
                 velocity_world *= math.exp(-VELOCITY_DAMPING_PER_S * dt)
             position_world += velocity_world * dt
 
-            rocket.location = position_world * POSITION_SCALE
+            rocket.location = _remap_position(position_world) * POSITION_SCALE
 
         t_rel = (t - first_t) / max(1e-9, TIME_SCALE)
         frame = START_FRAME + t_rel * FPS
