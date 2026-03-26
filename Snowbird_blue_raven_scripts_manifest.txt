@@ -1,0 +1,7 @@
+Download these files:
+1. SnowbirdPrim_blue_raven_LR_analysis_final.py
+2. SnowbirdPrim_blue_raven_HR_analysis_final.py
+
+Suggested commands:
+python SnowbirdPrim_blue_raven_LR_analysis_final.py "SnowbirdPrim-LR_03-21-2026_10_52_17.csv" --summary "SnowbirdPrim_summary_03-21-2026_10_52_17.csv"
+python SnowbirdPrim_blue_raven_HR_analysis_final.py "SnowbirdPrim-HR_03-21-2026_10_52_17.csv"
