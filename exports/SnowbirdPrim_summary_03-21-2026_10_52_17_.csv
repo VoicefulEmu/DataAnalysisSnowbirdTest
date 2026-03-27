@@ -1,0 +1,48 @@
+Rocket Name,SnowbirdPrim
+Firmware,09afed1 11/05/2024 15:55:57
+Serial number,SN602 SnowbirdPrim
+Max Altitude,23276.37 feet
+Max velocity,1974.52 feet/sec
+Pad altitude ASL,1952.05 feet
+Launch date,21-Mar-26
+Launch time,10:52:17.284
+Time to first burnout,3.7 sec
+Time to Apo channel fire,38.6 sec
+Time to gyro overload,73.6 sec
+Time to third channel fire,0.0 sec
+Time to main channel fire,217.9 sec
+Time to fourth channel fire,0.0 sec
+Launch rod angle,0.6 deg
+Tilt angle at burnout,15.6 deg
+Roll rate at burnout,-24.8 deg/sec
+Thrust tilt efficiency,97.99%
+Number of ascent rolls,3.548
+Horiz. velocity at apogee,135.9 feet/sec
+Inertial navigation max alt,28159.3 feet
+Max motor burn acceleration,24.5 Gs
+Peak drag deceleration,4.7 Gs
+Apo channel max accel,18.6 Gs
+Main channel max accel,50.8 Gs
+3rd channel max accel,0.0 Gs
+4th channel max accel,0.0 Gs
+Max landing accel,45.8 Gs
+Drogue descent rate,-172.2 feet/sec
+Main chute deploy altitude,1474.2 feet
+Main chute descent rate,-14.9 feet
+Landing Time,10:57:52.624
+Temperature on pad,89.2 F
+Max Temperature,89.9 F
+Min Temperature,83.85 F
+Battery voltage on pad,8.12 V
+Min Battery voltage,7.32 V
+Battery voltage at landing,8.1 V
+Build date,12-Oct-25
+Build time,15:57:13.000
+Flight number,2
+Direction of 1st motion,0.9999,-0.0151,0.0059
+Gravity direction on pad,1.0000,-0.0086,-0.0023
+Low-G accel pad offset,-0.0036,0.0000,0.0000
+Hi-G accel pad offset,0.02,0.20,0.93
+Pad gyro rates (deg/sec),0.28,-0.33,-3.15
+Pad Hi-G accel,1.02,0.20,0.93
+Pad Low-G Accel,1.00,-0.01,-0.00

@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+scipy
+
+# Blender-only script dependency notes:
+# blendr_snowbird_ascent_from_hr_csv.py imports bpy and mathutils.
+# Those are provided by Blender's Python environment rather than this venv.

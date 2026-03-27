@@ -1,2 +1,0 @@
-max_accel_time_s,max_accel_mag_g,max_gyro_time_s,max_gyro_mag_deg_s,max_abs_jerk_time_s,max_abs_jerk_excess_g_per_s,event_threshold_excess_g,event_count,apo_time_s,main_time_s
-218.664,50.75014876825486,74.166,2306.6054777529685,331.59,-10286.92224198096,22.86105446039043,3,38.6,217.9

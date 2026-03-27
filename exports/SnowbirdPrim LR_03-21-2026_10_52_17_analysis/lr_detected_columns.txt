@@ -1,0 +1,7 @@
+Flight_Time_(s)
+Baro_Altitude_AGL_(feet)
+Velocity_Up
+Velocity_DR
+Velocity_CR
+Apo_fired
+Main_fired
