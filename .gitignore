@@ -11,3 +11,6 @@ _build/
 cmake/**/.generated/*
 cmake/**/CMake*
 out/
+__pycache__/
+*.py[cod]
+*$py.class
