@@ -11,3 +11,4 @@ _build/
 cmake/**/.generated/*
 cmake/**/CMake*
 out/
+__pycache__/
