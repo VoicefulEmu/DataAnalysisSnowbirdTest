@@ -6,5 +6,5 @@ Accel_X
 Accel_Y
 Accel_Z
 drogue_time_s=38.6
-event_70_time_s=70.0
+event_70_time_s=72.0
 main_time_s=217.9
